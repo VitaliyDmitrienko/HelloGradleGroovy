@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id('application')
     id "io.spring.dependency-management" version "1.1.0"
 }
 
@@ -9,6 +10,24 @@ version = '1.0-SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
+
+tasks.register('helloGradle') {
+    group 'Greetings'
+
+    doLast {
+        println('Hello Gradle Task!!! (from build.gradle)')
+    }
+}
+
+tasks.register('afterParty') {
+    group 'Greetings'
+
+    doLast {
+        println('Hello after Gradle')
+    }
+}
+
+afterParty.dependsOn ('helloGradle')
 
 
 repositories {
@@ -28,7 +47,16 @@ jar {
 //    manifest {
 //        from 'MANIFEST.MF'
 //    }
+//    from {
+//        rootProject.meta-inf}
 //}
+
+//mainClassName = "org.example.Main"
+//
+//jar {
+//    manifest.attributes("Main-Class": mainClassName);
+//}
+
 
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.2')
