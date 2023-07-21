@@ -8,8 +8,8 @@ plugins {
 group = 'org.example'
 version = '1.0-SNAPSHOT'
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 tasks.register('helloGradle') {
     group 'Greetings'
@@ -34,21 +34,42 @@ repositories {
     mavenCentral()
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'org.example.Main'
-    }
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
+//jar {
+//    manifest {
+//        attributes 'Main-Class': 'org.example.Main'
+//    }
+//    from {
+//        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//}
 
 //jar {
 //    manifest {
 //        from 'MANIFEST.MF'
 //    }
 //    from {
+//        srcDirs 'src/main/resources'}
 //        rootProject.meta-inf}
+//}
+
+jar {
+    manifest {
+        from('src/main/resources/META-INF/MANIFEST.MF')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+//sourceSets {
+//    main {
+//        resources {
+//            srcDir "src/main/resources"
+//
+////            srcDir "src/main"
+////            include "configs/**/*.xml"
+////        }
+//    }
 //}
 
 //mainClassName = "org.example.Main"
@@ -73,4 +94,12 @@ dependencyManagement {
 
 test {
     useJUnitPlatform()
+}
+
+tasks.register('managedVersions') {
+    doLast {
+        dependencyManagement.managedVersions.each {
+            print it
+        }
+    }
 }
